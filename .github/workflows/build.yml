@@ -18,9 +18,9 @@ jobs:
 
       - name: Compile Braids and Generate WAV
         run: |
-          make -f braids/makefile clean
-          make -f braids/makefile OPTIM=-O3
-          make -f braids/makefile wav
+          make clean
+          make OPTIM=-O3
+          make wav
 
       - name: Save Firmware WAV Artifact
         uses: actions/upload-artifact@v4
