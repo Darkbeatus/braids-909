@@ -1,0 +1,29 @@
+name: Build Braids 909 Firmware
+
+on: [push, workflow_dispatch]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository & Submodules
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install ARM GCC Toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-arm-none-eabi build-essential python3
+
+      - name: Compile Braids and Generate WAV
+        run: |
+          make -f braids/makefile clean
+          make -f braids/makefile OPTIM=-O3
+          make -f braids/makefile wav
+
+      - name: Save Firmware WAV Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: braids-909-rumble-wav
+          path: build/braids/braids.wav
